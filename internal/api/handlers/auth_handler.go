@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/url"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -61,5 +62,5 @@ func (h *AuthHandler) LoginCallbackHandler(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(24 * time.Hour),
 	})
 
-	return c.Redirect("http://localhost:5173", fiber.StatusTemporaryRedirect)
+	return c.Redirect(os.Getenv("FRONTEND_URL"), fiber.StatusTemporaryRedirect)
 }
