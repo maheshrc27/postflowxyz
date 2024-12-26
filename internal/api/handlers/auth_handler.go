@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/url"
-	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -25,7 +24,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	authURL := "https://accounts.google.com/o/oauth2/v2/auth"
 	params := url.Values{}
 	params.Add("client_id", h.cfg.GoogleClientID)
-	params.Add("redirect_uri", "http://localhost:3000/login/callback")
+	params.Add("redirect_uri", h.cfg.GoogleRedirectURI)
 	params.Add("response_type", "code")
 	params.Add("scope", "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email")
 	params.Add("state", "secureRandomState")
@@ -62,5 +61,5 @@ func (h *AuthHandler) LoginCallbackHandler(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(24 * time.Hour),
 	})
 
-	return c.Redirect(os.Getenv("FRONTEND_URL"), fiber.StatusTemporaryRedirect)
+	return c.Redirect(h.cfg.FrontendURL, fiber.StatusTemporaryRedirect)
 }
