@@ -87,7 +87,7 @@ func (s *videoService) RequestVideo(ctx context.Context, userID int64, jsonData 
 		return "", err
 	}
 
-	videoURL := fmt.Sprintf("https://pub-f8f43aa198a449518df6744ec9ce452c.r2.dev/%s.mp4", response.VideoID)
+	videoURL := fmt.Sprintf("https://assets.postflow.org/%s.mp4", response.VideoID)
 
 	asset := models.MediaAsset{
 		UserID:   userID,
