@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	config "github.com/maheshrc27/postflow/configs"
 	"github.com/maheshrc27/postflow/internal/models"
 	"github.com/maheshrc27/postflow/internal/repository"
 	"github.com/maheshrc27/postflow/internal/transfer"
@@ -20,14 +21,16 @@ type VideoService interface {
 }
 
 type videoService struct {
-	c repository.CreditsRepository
-	a repository.MediaAssetRepository
+	c   repository.CreditsRepository
+	a   repository.MediaAssetRepository
+	cfg config.Config
 }
 
-func NewVideoService(c repository.CreditsRepository, a repository.MediaAssetRepository) VideoService {
+func NewVideoService(c repository.CreditsRepository, a repository.MediaAssetRepository, cfg config.Config) VideoService {
 	return &videoService{
-		c: c,
-		a: a,
+		c:   c,
+		a:   a,
+		cfg: cfg,
 	}
 }
 
@@ -58,8 +61,7 @@ func (s *videoService) RequestVideo(ctx context.Context, userID int64, jsonData 
 		return "", err
 	}
 
-	url := "http://127.0.0.1:5000/generate"
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer([]byte(jsonData)))
+	resp, err := http.Post(s.cfg.FlaskURL, "application/json", bytes.NewBuffer([]byte(jsonData)))
 	if err != nil {
 		slog.Info(err.Error())
 		return "", err

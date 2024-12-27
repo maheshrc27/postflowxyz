@@ -4,15 +4,17 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	config "github.com/maheshrc27/postflow/configs"
 	"github.com/maheshrc27/postflow/internal/service"
 )
 
 type UserHandler struct {
-	s service.UserService
+	s   service.UserService
+	cfg config.Config
 }
 
-func NewUserHandler(service service.UserService) *UserHandler {
-	return &UserHandler{s: service}
+func NewUserHandler(service service.UserService, cfg config.Config) *UserHandler {
+	return &UserHandler{s: service, cfg: cfg}
 }
 
 func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
@@ -54,6 +56,6 @@ func (h *UserHandler) DeleteAccount(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(-3 * time.Second),
 	})
 
-	return c.Redirect("http://localhost:5173", fiber.StatusTemporaryRedirect)
+	return c.Redirect(h.cfg.FrontendURL, fiber.StatusTemporaryRedirect)
 
 }

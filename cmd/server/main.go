@@ -64,7 +64,7 @@ func main() {
 	authService := service.NewAuthService(*cfg, userRepo, creditsRepo)
 	userService := service.NewUserService(userRepo)
 	creditsService := service.NewCreditsService(creditsRepo)
-	videoService := service.NewVideoService(creditsRepo, mediaAssetRepo)
+	videoService := service.NewVideoService(creditsRepo, mediaAssetRepo, *cfg)
 	paymentService := service.NewPaymentService(*cfg, userRepo, creditsRepo)
 
 	auth := handlers.NewAuthHandler(*cfg, authService)
@@ -77,7 +77,7 @@ func main() {
 	api := app.Group("/api")
 	api.Use(middleware.AuthMiddleware(cfg))
 
-	user := handlers.NewUserHandler(userService)
+	user := handlers.NewUserHandler(userService, *cfg)
 	api.Get("/user/info", user.GetUserInfo)
 	api.Post("/user/delete", user.DeleteAccount)
 
