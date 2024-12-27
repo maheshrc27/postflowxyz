@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"time"
-
 	"github.com/gofiber/fiber/v2"
 	config "github.com/maheshrc27/postflow/configs"
 	"github.com/maheshrc27/postflow/internal/service"
@@ -46,16 +44,6 @@ func (h *UserHandler) DeleteAccount(c *fiber.Ctx) error {
 		})
 	}
 
-	c.Cookie(&fiber.Cookie{
-		Name:     "",
-		Value:    "",
-		HTTPOnly: true,
-		Secure:   false,
-		SameSite: fiber.CookieSameSiteNoneMode,
-		Path:     "/",
-		Expires:  time.Now().Add(-3 * time.Second),
-	})
-
-	return c.Redirect(h.cfg.FrontendURL, fiber.StatusTemporaryRedirect)
+	return c.SendStatus(fiber.StatusOK)
 
 }
