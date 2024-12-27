@@ -61,7 +61,8 @@ func (s *videoService) RequestVideo(ctx context.Context, userID int64, jsonData 
 		return "", err
 	}
 
-	resp, err := http.Post(s.cfg.FlaskURL, "application/json", bytes.NewBuffer([]byte(jsonData)))
+	url := fmt.Sprintf("%s/generate", s.cfg.FlaskURL)
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer([]byte(jsonData)))
 	if err != nil {
 		slog.Info(err.Error())
 		return "", err
